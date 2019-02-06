@@ -60,15 +60,15 @@ class Salad {
 
 
   price() {
-    console.log(this.foundation[Object.keys(this.foundation)]);
-
-    let price = this.extras.map((s) => console.log(s)).reduce((acc, next) => acc + next);
-    console.log(price);
-
-
+    let pF = this.foundation.map(s => s[(Object.keys(s))]["price"]).reduce((acc, next) => acc + next);
+    let pP = this.proteins.map(s => s[(Object.keys(s))]["price"]).reduce((acc, next) => acc + next);
+    let pE = this.extras.map(s => s[(Object.keys(s))]["price"]).reduce((acc, next) => acc + next);
+    let pD = this.dressing.map(s => s[(Object.keys(s))]["price"]).reduce((acc, next) => acc + next);
+    console.log(pF + pP + pE + pD);
   }
 
-  toString() {this.foundation.forEach((p) => {console.log(Object.keys(p))});
+  toString() {
+    this.foundation.forEach((p) => {console.log(Object.keys(p))});
     this.proteins.forEach((p) => {console.log(Object.keys(p))});
     this.extras.forEach((p) => {console.log(Object.keys(p))});
     this.dressing.forEach((p) => {console.log(Object.keys(p))});
@@ -78,4 +78,4 @@ class Salad {
 let myCesarSalad = new Salad();
 myCesarSalad.add({Sallad: {price: 10,  foundation: true,  vegan: true},'Norsk fjordlax': {price: 30,  protein: true},'Färsk koriander': {price: 10,  extra: true,  vegan: true},Gurka: {price: 5,  extra: true,  vegan: true},'Soltorkad tomat': {price: 5,  extra: true,  vegan: true},Rhodeisland: {price: 5,  dressing: true,  lactose: true}});
 myCesarSalad.price();
- // myCesarSalad.toString();
+myCesarSalad.toString();
