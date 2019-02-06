@@ -62,8 +62,8 @@ class Salad {
   price() {
     console.log(this.foundation[Object.keys(this.foundation)]);
 
-    //let price = this.extras.map((s) =>    ).reduce((acc, next) => acc + next);
-    //console.log(price);
+    let price = this.extras.map((s) => console.log(s)).reduce((acc, next) => acc + next);
+    console.log(price);
 
 
   }
