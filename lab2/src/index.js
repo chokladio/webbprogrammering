@@ -9,6 +9,9 @@ import "bootstrap/dist/js/bootstrap.js"; // skip this if you do not use bootstra
 import $ from 'jquery'; // skip this if you do not use bootstrap modals
 import Popper from 'popper.js'; // skip this if you do not use bootstrap modals
 
-ReactDOM.render( < App / > , document.getElementById('root'));
+ReactDOM.render(
+  < App / >,
+  document.getElementById('root')
+);
 
 serviceWorker.unregister();
