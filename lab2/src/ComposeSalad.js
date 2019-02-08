@@ -9,16 +9,23 @@ class ComposeSalad extends Component {
       ingredients: []
     }
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   clearArray = () => {
     this.state = {
-      ingredients: []
+      foundation: [],
+      protein: [],
+      extras: [],
+      foundation: []
     }
   }
 
   alertArray = () => {
-    alert(this.state.ingredients);
+    alert(this.state.foundation);
+    alert(this.state.protein);
+    alert(this.state.extras);
+    alert(this.state.dressing);
   }
 
   createSalad = () => {
@@ -38,18 +45,48 @@ class ComposeSalad extends Component {
     alert(mySalad.price());
   }
 
+  handleSubmit(f) {
+    //Does nothing
+  }
+
   handleChange(e) {
     const item = e.target.name;
+    const value = e.target.value;
     let isChecked = e.target.checked;
 
-    if (isChecked) {
-      this.setState(prevState => ({
-        ingredients: [
-          ...prevState.ingredients,
-          item
-        ]
-      }));
-    }
+    this.setState({foundation: value});
+    this.setState({dressing: value});
+    this.setState(prevState => ({
+      protein: [
+        prevState.protein,
+        item
+      ]
+    }));
+    this.setState(prevState => ({
+      extras: [
+        prevState.extras,
+        item
+      ]
+    }));
+
+    console.log(this.setState);
+
+    //DUMT med lista pga behöver söka igenom för att se om objekt redan finns. Fixa Object/Map
+    // if (isChecked) {
+    //   this.setState(prevState => ({
+    //     ingredients: [
+    //       ...prevState.ingredients,
+    //       item
+    //     ]
+    //   }));
+    // } else if (value) {
+    //   this.setState(prevState => ({
+    //     ingredients: [
+    //       ...prevState.ingredients,
+    //       value
+    //     ]
+    //   }));
+    // }
   }
 
   render() {
@@ -78,7 +115,6 @@ class ComposeSalad extends Component {
           <div className="w-100"></div>
           <div className="form-group mt-2 col-xl-4 col-md-6 col-8">
             <select class="form-control" value={this.state.value} onChange={this.handleChange}>
-              <option>Välj...</option>
               {foundations.map(name => <option>{name}</option>)}
             </select>
           </div>
