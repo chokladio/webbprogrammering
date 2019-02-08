@@ -143,6 +143,7 @@ myCesarSalad.price();
 
 let mySalad = new ExtraGreenSalad();
 // mySalad is a prototype of ExtraGreenSalad which in turn is a prototype of Salad.
+
 mySalad.add(ceasarsallad);
 
 myCesarSalad.toString();

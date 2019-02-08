@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import inventory from './inventory.ES6';
 import ComposeSalad from './ComposeSalad';
+import logo from './logo.svg';
 
 class App extends Component {
   render() {
@@ -9,6 +10,7 @@ class App extends Component {
       <div className="jumbotron jumbotron-fluid">
         <div className="container">
             <div className="row justify-content-center">
+              <img src={logo} className="App-logo" alt="logo" />
               <h1 className="display-4">Sallad? Sallad!</h1>
             </div>
             <div className="row justify-content-center">
