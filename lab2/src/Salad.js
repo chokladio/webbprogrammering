@@ -1,4 +1,3 @@
-'use strict';
 const inventory = require("./inventory.ES6.js");
 
 var foundationList = [];

@@ -10,15 +10,16 @@ class App extends Component {
       <div className="jumbotron jumbotron-fluid">
         <div className="container">
             <div className="row justify-content-center">
-              <img src={logo} className="App-logo" alt="logo" />
-              <h1 className="display-4">Sallad? Sallad!</h1>
+              <img src={logo} style={{width:150 + 'px'}}  className="App-logo" alt="logo" />
+              <div className="w-100"></div>
+            <h1 className="display-4">Sallad? Sallad!</h1>
             </div>
             <div className="row justify-content-center">
               <p className="lead">"Man säger ju aldrig nej till lite sallad"</p>
             </div>
         </div>
       </div>
-
+      
       <ComposeSalad inventory={inventory}/>
 
     <footer className="page-footer font-small gray mt-5 pt-5 font-small">
