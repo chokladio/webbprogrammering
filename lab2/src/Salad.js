@@ -1,24 +1,6 @@
-const inventory = require("./inventory.ES6.js");
+const inventory = require("./inventory.ES6");
 
-var foundationList = [];
-var proteinList = [];
-var extraList = [];
-var dressingList = [];
-
-for (var o in inventory) {
-  if (o.foundation) {
-    foundationList.push(o);
-  } else if (o.protein) {
-    proteinList.push(o);
-  } else if (o.extra) {
-    extraList.push(o);
-  } else if (o.dressing) {
-    dressingList.push(o);
-  }
-
-}
-
-class Salad {
+export default class Salad {
   constructor() {
     this.foundation = [];
     this.protein = [];
@@ -29,7 +11,7 @@ class Salad {
   add(sel) {
     let ingredients = sel.map(m => ({
       name: m,
-      ...inventory[m]
+      ...inventory.default[m]
     }));
     ingredients.forEach((i) => {
       if (i.foundation) {
@@ -128,6 +110,3 @@ class GourmetSalad extends Salad {
 }
 
 const ceasarsallad = ['Sallad', 'Kycklingfilé', 'Tomat', 'Krutonger', 'Inlagd lök', 'Parmesan', 'Ceasardressing'];
-
-
-export default Salad;

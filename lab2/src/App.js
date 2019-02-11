@@ -8,41 +8,49 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      orders: []
-    };
+      orders: [],
+    }
+    this.newOrder = this.newOrder.bind(this);
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-
-    console.log("hej");  
+  newOrder(salad) {
+    this.setState(prevState => ({
+      orders: [
+        ...this.state.orders,
+        salad
+      ]
+    }));
+    console.log(this.state.orders);
+    console.log(salad.price());
   }
 
   render() {
+    const props = {};
     return (<div>
       <div className="jumbotron jumbotron-fluid">
         <div className="container">
-            <div className="row justify-content-center">
-              <img src={logo} style={{width:150 + 'px'}}  className="App-logo" alt="logo" />
-              <div className="w-100"></div>
+          <div className="row justify-content-center">
+            <img src={logo} style={{
+                width: 150 + 'px'
+              }} className="App-logo" alt="logo"/>
+            <div className="w-100"></div>
             <h1 className="display-4">Sallad? Sallad!</h1>
-            </div>
-            <div className="row justify-content-center">
-              <p className="lead">"Man säger ju aldrig nej till lite sallad"</p>
-            </div>
+          </div>
+          <div className="row justify-content-center">
+            <p className="lead">"Man säger ju aldrig nej till lite sallad"</p>
+          </div>
         </div>
       </div>
 
-      <ComposeSalad inventory={inventory}/>
+      <ComposeSalad {...props} inventory={inventory} newOrder={this.newOrder}/>
 
+      <footer className="page-footer font-small gray mt-5 pt-5 font-small">
+        <div className="footer-copyright text-center py-3">
+          <p>EDAF90 - Web Programming 2019</p>
+        </div>
+      </footer>
 
-    <footer className="page-footer font-small gray mt-5 pt-5 font-small">
-      <div className="footer-copyright text-center py-3">
-        <p>EDAF90 - Web Programming 2019</p>
-      </div>
-    </footer>
-
-  </div>);
+    </div>);
   }
 }
 

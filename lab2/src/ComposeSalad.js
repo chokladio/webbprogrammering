@@ -17,41 +17,31 @@ class ComposeSalad extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  clearArray = () => {
+  clearArray = () => { //Fixa så att form resettas
     this.state = list;
   }
 
-  alertArray = () => {
+  alertArray = () => { //Bara test
     alert(this.state.foundation + "," + this.state.protein + "," + this.state.extras + "," + this.state.dressing);
-  }
-
-  createSalad = () => {
-    const ceasarsallad = [
-      'Sallad',
-      'Kycklingfilé',
-      'Tomat',
-      'Krutonger',
-      'Inlagd lök',
-      'Parmesan',
-      'Ceasardressing'
-    ];
-
-    let mySalad = new Salad();
-    mySalad.add(ceasarsallad);
-    console.log(mySalad.toString());
-    console.log(mySalad.price());
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
 
-    let s = [];
-    s.push(this.state.foundation);
-    this.state.protein.map((p) => {s.push(p)});
-    this.state.extras.map((p) => {s.push(p)});
-    s.push(this.state.dressing);
-    console.log(s);
-    console.log(this.state.orders);
+    let sallad = []; //Skapa lista som add() kan läsa
+    sallad.push(this.state.foundation);
+    this.state.protein.forEach((p) => {sallad.push(p)});
+    this.state.extras.forEach((p) => {sallad.push(p)});
+    sallad.push(this.state.dressing);
+    console.log(sallad);
+
+    this.createSalad(sallad);
+  }
+
+  createSalad = (s) => {
+    const newSalad = new Salad();
+    newSalad.add(s);
+    this.props.newOrder(newSalad);
   }
 
   handleChange(e, type) {
@@ -67,10 +57,7 @@ class ComposeSalad extends Component {
         this.setState({[type]: array});
       } else { //om den inte finns
         this.setState(prevState => ({
-          [type]: [
-            ...prevState[type],
-            item
-          ]
+          [type]: [...prevState[type],item]
         }));
       }
     }
