@@ -5,6 +5,19 @@ import ComposeSalad from './ComposeSalad';
 import logo from './logo.svg';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      orders: []
+    };
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    console.log("hej");  
+  }
+
   render() {
     return (<div>
       <div className="jumbotron jumbotron-fluid">
@@ -19,8 +32,9 @@ class App extends Component {
             </div>
         </div>
       </div>
-      
+
       <ComposeSalad inventory={inventory}/>
+
 
     <footer className="page-footer font-small gray mt-5 pt-5 font-small">
       <div className="footer-copyright text-center py-3">

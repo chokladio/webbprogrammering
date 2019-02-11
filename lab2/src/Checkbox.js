@@ -3,12 +3,8 @@ import PropTypes from 'prop-types';
 
 const Checkbox = ({
   name,
-  arr,
-  checked = false,
   onChange
-}) => (<span>
-  <input type='checkbox' checked={checked} name={name} onChange={onChange}/>
-</span>);
+}) => (<input type='checkbox' name={name} onChange={onChange}/>);
 
 Checkbox.propTypes = {
   name: PropTypes.string.isRequired,
