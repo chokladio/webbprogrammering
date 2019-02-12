@@ -101,7 +101,7 @@ class ComposeSalad extends Component {
           <div className="form-check mt-2 col-xl-7 col-md-8 col-sm-10 col-11">
             {
               proteins.map(name => <label key={name} className="form-check-label px-2 py-1 col-xl-6 col">
-                <Checkbox name={name} onChange={(e) => this.handleChange(e, "protein")}/>
+                <Checkbox name={name} checked={this.state.protein.includes({name}) ? this.state.protein.includes({name}) : false} onChange={(e) => this.handleChange(e, "protein")}/>
                 <span className="px-2 py-1">{name}</span>
               </label>)
             }
@@ -114,7 +114,7 @@ class ComposeSalad extends Component {
           <div className="form-check mt-2 col-xl-7 col-md-8 col-sm-10 col-11">
             {
               extras.map(name => <label key={name} className="form-check-label px-2 py-1 col-xl-4 col-sm-6 col">
-                <Checkbox name={name} onChange={(e) => this.handleChange(e, "extras")}/>
+                <Checkbox name={name} checked={this.state.extras.includes({name}) ? this.state.extras.includes({name}) : false} onChange={(e) => this.handleChange(e, "extras")}/>
                 <span className="px-2 py-1">{name}</span>
               </label>)
             }
