@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-import Checkbox from "./Checkbox";
 import Salad from "./Salad";
 
 const list = {
-  foundation: [],
+  foundation: "",
   protein: [],
   extras: [],
-  dressing: [],
-  checked:{}
+  dressing: ""
 };
 
 class ComposeSalad extends Component {
@@ -19,49 +17,45 @@ class ComposeSalad extends Component {
   }
 
   clearArray = () => { //Fixa så att form resettas
-    this.state = list;
-
-  }
-
-  alertArray = () => { //Bara test
-    alert(this.state.foundation + "," + this.state.protein + "," + this.state.extras + "," + this.state.dressing);
+    this.setState(list);
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
-    let sallad = []; //Skapa lista som add() kan läsa
+
+    let sallad = []; //Skapa lista som add() kan hantera
     sallad.push(this.state.foundation);
-    this.state.protein.forEach((p) => {sallad.push(p)});
-    this.state.extras.forEach((p) => {sallad.push(p)});
+    let arr = this.state.protein;
+    Object.keys(arr).forEach(k => {if (arr[k]) {
+      sallad.push(k);
+    }});
+    arr = this.state.extras;
+    Object.keys(arr).forEach(k => {if (arr[k]) {
+      sallad.push(k);
+    }});
     sallad.push(this.state.dressing);
-    console.log(sallad);
 
     this.createSalad(sallad);
   }
 
   createSalad = (s) => {
-    const newSalad = new Salad();
-    newSalad.add(s);
-    this.props.newOrder(newSalad);
+    const mySalad = new Salad();
+    mySalad.add(s);
+    this.props.newOrder(mySalad);
   }
 
   handleChange(e, type) {
     const item = e.target.name;
-    if (type == "foundation" || type == "dressing") {
+    if (type === "foundation" || type === "dressing") {
       this.setState({[type]: e.target.value});
-    } else if (type == "extras" || type == "protein") {
-      let array = [...this.state[type]];
-      let index = array.indexOf(item);
-
-      if (index > -1) { //om den redan finns
-        array.splice(index, 1); //ta bort
-        this.setState({[type]: array});
-      } else { //om den inte finns
-        this.setState(prevState => ({
-          [type]: [...prevState[type],item]
-        }));
-      }
+    } else if (type === "extras" || type === "protein") {
+      let state = this.state[type][item];
+      this.setState(prevState => ({
+        [type]: {
+          ...prevState[type],
+          [item]: !state
+        }
+      }));
     }
   }
 
@@ -72,26 +66,19 @@ class ComposeSalad extends Component {
     let extras = Object.keys(inventory).filter(name => inventory[name].extra);
     let dressings = Object.keys(inventory).filter(name => inventory[name].dressing);
 
-    return (<div className="container">
-      <div>
-        <button onClick={this.clearArray}>
-          rensa
-        </button>
-        <button onClick={this.alertArray}>
-          alert
-        </button>
-        <button onClick={this.createSalad}>
-          testsallad
-        </button>
-      </div>
-
+    return (
       <form onSubmit={this.handleSubmit}>
+        <div>
+          <button onClick={this.clearArray}>
+            rensa
+          </button>
+        </div>
         <div className="row justify-content-center mt-5">
           <h5>Välj en bas</h5>
           <div className="w-100"></div>
           <div className="form-group mt-2 col-xl-4 col-md-6 col-8">
             <select className="form-control" defaultValue="Välj bas" onChange={(e) => this.handleChange(e, "foundation")}>
-              <option  disabled="disabled" hidden="hidden">Välj bas</option>
+              <option disabled="disabled" hidden="hidden">Välj bas</option>
               {foundations.map(name => <option key={name}>{name}</option>)}
             </select>
           </div>
@@ -103,7 +90,7 @@ class ComposeSalad extends Component {
           <div className="form-check mt-2 col-xl-7 col-md-8 col-sm-10 col-11">
             {
               proteins.map(name => <label key={name} className="form-check-label px-2 py-1 col-xl-6 col">
-                <Checkbox name={name} checked={this.state.protein.includes({name}) ? this.state.protein.includes({name}) : false} onChange={(e) => this.handleChange(e, "protein")}/>
+                <input type='checkbox' name={name} checked={this.state.protein[name] || false} onChange={(e) => this.handleChange(e, "protein")}/>
                 <span className="px-2 py-1">{name}</span>
               </label>)
             }
@@ -116,7 +103,7 @@ class ComposeSalad extends Component {
           <div className="form-check mt-2 col-xl-7 col-md-8 col-sm-10 col-11">
             {
               extras.map(name => <label key={name} className="form-check-label px-2 py-1 col-xl-4 col-sm-6 col">
-                <Checkbox name={name} checked={this.state.extras.includes({name}) ? this.state.extras.includes({name}) : false} onChange={(e) => this.handleChange(e, "extras")}/>
+                <input type='checkbox' name={name} checked={this.state.extras[name] || false} onChange={(e) => this.handleChange(e, "extras")}/>
                 <span className="px-2 py-1">{name}</span>
               </label>)
             }
@@ -135,7 +122,8 @@ class ComposeSalad extends Component {
         </div>
         <input type="submit" value="Submit"/>
       </form>
-    </div>);
+
+  );
   }
 }
 

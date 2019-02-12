@@ -1,31 +1,31 @@
 import React, {Component} from 'react';
 import './App.css';
-import inventory from './inventory.ES6';
-import ComposeSalad from './ComposeSalad';
+import inventory from './components/inventory.ES6';
+import ComposeSalad from './components/ComposeSalad';
+import ViewOrder from './components/ViewOrder';
 import logo from './logo.svg';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      orders: [],
+      order: []
     }
     this.newOrder = this.newOrder.bind(this);
   }
 
   newOrder(salad) {
+    //salad = {...salad, "price": salad.price(), "index":(this.state.order.length+1)};
     this.setState(prevState => ({
-      orders: [
-        ...this.state.orders,
+      order: [
+        ...prevState.order,
         salad
       ]
     }));
-    console.log(this.state.orders);
-    console.log(salad.price());
+    console.log(salad);
   }
 
   render() {
-    const props = {};
     return (<div>
       <div className="jumbotron jumbotron-fluid">
         <div className="container">
@@ -41,8 +41,12 @@ class App extends Component {
           </div>
         </div>
       </div>
-
-      <ComposeSalad {...props} inventory={inventory} newOrder={this.newOrder}/>
+      <div className="container">
+        <ViewOrder order={this.state.order}/>
+      </div>
+      <div className="container">
+        <ComposeSalad inventory={inventory} newOrder={this.newOrder}/>
+      </div>
 
       <footer className="page-footer font-small gray mt-5 pt-5 font-small">
         <div className="footer-copyright text-center py-3">

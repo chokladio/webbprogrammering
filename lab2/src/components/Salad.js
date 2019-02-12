@@ -108,5 +108,3 @@ class GourmetSalad extends Salad {
     return (pF + pP + pE + pD);
   }
 }
-
-const ceasarsallad = ['Sallad', 'Kycklingfilé', 'Tomat', 'Krutonger', 'Inlagd lök', 'Parmesan', 'Ceasardressing'];
