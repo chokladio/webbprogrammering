@@ -6,7 +6,8 @@ const list = {
   foundation: [],
   protein: [],
   extras: [],
-  dressing: []
+  dressing: [],
+  checked:{}
 };
 
 class ComposeSalad extends Component {
@@ -19,6 +20,7 @@ class ComposeSalad extends Component {
 
   clearArray = () => { //Fixa så att form resettas
     this.state = list;
+
   }
 
   alertArray = () => { //Bara test
@@ -27,7 +29,7 @@ class ComposeSalad extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log(this.state);
     let sallad = []; //Skapa lista som add() kan läsa
     sallad.push(this.state.foundation);
     this.state.protein.forEach((p) => {sallad.push(p)});
