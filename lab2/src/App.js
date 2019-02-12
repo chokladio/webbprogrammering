@@ -15,7 +15,7 @@ class App extends Component {
   }
 
   newOrder(salad) {
-    //salad = {...salad, "price": salad.price(), "index":(this.state.order.length+1)};
+    salad = {...salad, "price": salad.price()};
     this.setState(prevState => ({
       order: [
         ...prevState.order,

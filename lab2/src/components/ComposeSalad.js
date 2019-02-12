@@ -16,7 +16,7 @@ class ComposeSalad extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  clearArray = () => { //Fixa så att form resettas
+  clearArray = () => {
     this.setState(list);
   }
 
@@ -68,11 +68,7 @@ class ComposeSalad extends Component {
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <div>
-          <button onClick={this.clearArray}>
-            rensa
-          </button>
-        </div>
+
         <div className="row justify-content-center mt-5">
           <h5>Välj en bas</h5>
           <div className="w-100"></div>
@@ -121,6 +117,11 @@ class ComposeSalad extends Component {
           </div>
         </div>
         <input type="submit" value="Submit"/>
+          <div>
+            <button onClick={this.clearArray}>
+              rensa (ska köras onSubmit)
+            </button>
+          </div>
       </form>
 
   );
