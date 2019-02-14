@@ -32,7 +32,7 @@ const OrderView = props => (
     <td>{props.order.protein.map(n => n.name + ", ")}</td>
     <td>{props.order.extra.map(n => n.name + ", ")}</td>
     <td>{props.order.dressing.map(n => n.name)}</td>
-    <td>{props.order.price}</td>
+    <td>{props.order.price} kr</td>
     <td>
     <p className="text-danger">ta bort</p>
   </td>
