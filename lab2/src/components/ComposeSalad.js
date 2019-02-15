@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import Salad from "./Salad";
 
 const list = {
-  foundation: "Välj bas",
+  foundation: "",
   protein: [],
   extras: [],
-  dressing: "Välj dressing"
+  dressing: ""
 };
 
 class ComposeSalad extends Component {
@@ -77,7 +77,7 @@ class ComposeSalad extends Component {
           <div className="w-100"></div>
           <div className="form-group mt-2 col-xl-4 col-md-6 col-8">
             <select className="form-control" value={this.state.foundation} onChange={(e) => this.handleChange(e, "foundation")}>
-              <option disabled="disabled" hidden="hidden">Välj bas</option>
+              <option value="" hidden="hidden">Välj bas</option>
               {foundations.map(name => <option value={name} key={name}>{name}</option>)}
             </select>
           </div>
@@ -117,7 +117,7 @@ class ComposeSalad extends Component {
           <div className="w-100"></div>
           <div className="form-group mt-2 col-xl-4 col-md-6 col-8">
             <select className="form-control" value={this.state.dressing} onChange={(e) => this.handleChange(e, "dressing")}>
-              <option disabled="disabled" hidden="hidden">Välj dressing</option>
+              <option value="" hidden="hidden">Välj dressing</option>
               {dressings.map(name => <option value={name} key={name}>{name}</option>)}
             </select>
           </div>

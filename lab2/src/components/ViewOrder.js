@@ -24,16 +24,16 @@ const ViewOrder = props => {
       </table>
     </div>);
   }
-  return (<div className="row justify-content-center table-responsive">
-    <p>Mixa ihop en sallad först!</p>
+  return (<div className="row justify-content-center">
+    <div className="alert alert-warning mt-5">Mixa ihop en sallad först!</div>
   </div>);
 }
 
 const OrderView = props => (<tr>
   <td>{(props.index + 1)}</td>
   <td>{props.order.foundation.map(n => n.name)}</td>
-  <td>{props.order.protein.map(n => n.name + ", ")}</td>
-  <td>{props.order.extra.map(n => n.name + ", ")}</td>
+  <td>{props.order.protein.map((n,i) => (i ? ", " : "") + n.name)}</td>
+  <td>{props.order.extra.map((n,i) => (i ? ", " : "") + n.name)}</td>
   <td>{props.order.dressing.map(n => n.name)}</td>
   <td>{props.order.price}
     kr</td>

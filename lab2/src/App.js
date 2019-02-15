@@ -5,8 +5,7 @@ import ComposeSalad from './components/ComposeSalad';
 import ViewOrder from './components/ViewOrder';
 import {BrowserRouter as Router, Route, Redirect, Link, Switch} from "react-router-dom";
 import logo from './logo.svg';
-import Octicon, {Trashcan} from '@githubprimer/octicons-react'
-//npm install @githubprimer/octicons-react --save
+
 
 class App extends Component {
   constructor(props) {
@@ -49,9 +48,9 @@ class App extends Component {
       </div>
       <Router>
         <div className="container">
-          <ul className="nav nav-pills justify-content-center">
+          <ul className="nav nav-pills nav-justified justify-content-center">
             <li className="nav-item">
-              <Link className="nav-link" to="compose-salad">Komponera din egen sallad</Link>
+              <Link className="nav-link" to="compose-salad">Mixa din sallad</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="view-order">Visa beställning</Link>
