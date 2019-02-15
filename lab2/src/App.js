@@ -34,7 +34,7 @@ class App extends Component {
     const composeSaladElem = (params) => <ComposeSalad {...params} inventory={inventory} newOrder={this.newOrder}/>;
     const viewOrderElem = (params) => <ViewOrder {...params} inventory={inventory} order={this.state.order} newOrder={this.newOrder}/>;
     const notFound = () => (<div>404 Sidan finns inte</div>);
-    const NotFoundRedirect = () => <Redirect to='/not-found'/>
+    const NotFoundRedirect = () => <Redirect to='/not-found'/> //IMPLEMENTERA
     return (<Fragment>
       <div className="jumbotron jumbotron-fluid mb-1">
         <div className="row justify-content-center">
