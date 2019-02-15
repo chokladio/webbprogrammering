@@ -3,6 +3,7 @@ import './App.css';
 import inventory from './components/inventory.ES6';
 import ComposeSalad from './components/ComposeSalad';
 import ViewOrder from './components/ViewOrder';
+import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
 import logo from './logo.svg';
 
 class App extends Component {
@@ -15,7 +16,10 @@ class App extends Component {
   }
 
   newOrder(salad) {
-    salad = {...salad, "price": salad.price()};
+    salad = {
+      ...salad,
+      "price": salad.price()
+    };
     this.setState(prevState => ({
       order: [
         ...prevState.order,
@@ -26,6 +30,8 @@ class App extends Component {
   }
 
   render() {
+    const composeSaladElem = (params) => <ComposeSalad {...params} inventory={inventory} newOrder={this.newOrder}/>;
+    const viewOrderElem = (params) => <ViewOrder {...params} inventory={inventory} newOrder={this.newOrder}/>;
     return (<div>
       <div className="jumbotron jumbotron-fluid">
         <div className="container">
@@ -41,6 +47,22 @@ class App extends Component {
           </div>
         </div>
       </div>
+      <Router>
+          <div>
+            <ul className="nav nav-pills">
+              <li className="nav-item">
+                <Link className="nav-link" to="’compose-salad’">Komponera din egen sallad</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="’view-order’">Visa beställning</Link>
+              </li>
+
+              <Route path="’/compose-salad’" render={composeSaladElem}/>
+              <Route path="’/view-order’" render={viewOrderElem}/>
+            </ul>
+          </div>
+      </Router>
+
       <div className="container">
         <ViewOrder order={this.state.order}/>
       </div>
