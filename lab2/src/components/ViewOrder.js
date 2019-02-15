@@ -1,4 +1,6 @@
 import React from 'react';
+import Octicon, {Trashcan} from '@githubprimer/octicons-react';
+//npm install @githubprimer/octicons-react --save
 
 const ViewOrder = props => {
   if (props.order.length > 0) {
@@ -22,19 +24,21 @@ const ViewOrder = props => {
       </table>
     </div>);
   }
-  return ("");
+  return (<div className="row justify-content-center table-responsive">
+    <p>Mixa ihop en sallad först!</p>
+  </div>);
 }
 
-const OrderView = props => (
-  <tr>
-    <td>{(props.index + 1)}</td>
-    <td>{props.order.foundation.map(n => n.name)}</td>
-    <td>{props.order.protein.map(n => n.name + ", ")}</td>
-    <td>{props.order.extra.map(n => n.name + ", ")}</td>
-    <td>{props.order.dressing.map(n => n.name)}</td>
-    <td>{props.order.price} kr</td>
-    <td>
-    <p className="text-danger">ta bort</p>
+const OrderView = props => (<tr>
+  <td>{(props.index + 1)}</td>
+  <td>{props.order.foundation.map(n => n.name)}</td>
+  <td>{props.order.protein.map(n => n.name + ", ")}</td>
+  <td>{props.order.extra.map(n => n.name + ", ")}</td>
+  <td>{props.order.dressing.map(n => n.name)}</td>
+  <td>{props.order.price}
+    kr</td>
+  <td>
+    <Octicon icon={Trashcan}/>
   </td>
 </tr>)
 

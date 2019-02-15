@@ -1,10 +1,12 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import './App.css';
 import inventory from './components/inventory.ES6';
 import ComposeSalad from './components/ComposeSalad';
 import ViewOrder from './components/ViewOrder';
-import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Redirect, Link, Switch} from "react-router-dom";
 import logo from './logo.svg';
+import Octicon, {Trashcan} from '@githubprimer/octicons-react'
+//npm install @githubprimer/octicons-react --save
 
 class App extends Component {
   constructor(props) {
@@ -31,53 +33,49 @@ class App extends Component {
 
   render() {
     const composeSaladElem = (params) => <ComposeSalad {...params} inventory={inventory} newOrder={this.newOrder}/>;
-    const viewOrderElem = (params) => <ViewOrder {...params} inventory={inventory} newOrder={this.newOrder}/>;
-    return (<div>
-      <div className="jumbotron jumbotron-fluid">
-        <div className="container">
-          <div className="row justify-content-center">
-            <img src={logo} style={{
-                width: 150 + 'px'
-              }} className="App-logo" alt="logo"/>
-            <div className="w-100"></div>
-            <h1 className="display-4">Sallad? Sallad!</h1>
-          </div>
-          <div className="row justify-content-center">
-            <p className="lead">"Man säger ju aldrig nej till lite sallad"</p>
-          </div>
+    const viewOrderElem = (params) => <ViewOrder {...params} inventory={inventory} order={this.state.order} newOrder={this.newOrder}/>;
+    const notFound = () => (<div>404 Sidan finns inte</div>);
+    const NotFoundRedirect = () => <Redirect to='/not-found'/>
+    return (<Fragment>
+      <div className="jumbotron jumbotron-fluid mb-1">
+        <div className="row justify-content-center">
+          <h1 className="display-4"><img src={logo} style={{
+        width: 90 + 'px'
+      }} className="App-logo align-top" alt="logo"/>Sallad? Sallad!</h1>
+        </div>
+        <div className="row justify-content-center">
+          <p className="lead mt-3">"Man säger ju aldrig nej till lite sallad"</p>
         </div>
       </div>
       <Router>
-          <div>
-            <ul className="nav nav-pills">
-              <li className="nav-item">
-                <Link className="nav-link" to="’compose-salad’">Komponera din egen sallad</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="’view-order’">Visa beställning</Link>
-              </li>
-
-              <Route path="’/compose-salad’" render={composeSaladElem}/>
-              <Route path="’/view-order’" render={viewOrderElem}/>
-            </ul>
-          </div>
-      </Router>
-
-      <div className="container">
-        <ViewOrder order={this.state.order}/>
-      </div>
-      <div className="container">
-        <ComposeSalad inventory={inventory} newOrder={this.newOrder}/>
-      </div>
-
-      <footer className="page-footer font-small gray mt-5 pt-5 font-small">
-        <div className="footer-copyright text-center py-3">
-          <p>EDAF90 - Web Programming 2019</p>
+        <div className="container">
+          <ul className="nav nav-pills justify-content-center">
+            <li className="nav-item">
+              <Link className="nav-link" to="compose-salad">Komponera din egen sallad</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="view-order">Visa beställning</Link>
+            </li>
+          </ul>
+          <Switch>
+            <Route path="/" exact component={composeSaladElem}/>
+            <Route path="/compose-salad" render={composeSaladElem}/>
+            <Route path="/view-order" render={viewOrderElem}/>
+            <Route component={notFound}/>
+          </Switch>
         </div>
-      </footer>
-
-    </div>);
+      </Router>
+      <Footer/>
+    </Fragment>);
   }
 }
+
+const Footer = props => (<footer className="page-footer font-small gray mt-5 pt-5 font-small">
+  <div className="footer-copyright text-center pt-3">
+    <p>EDAF90 - Web Programming 2019
+      <br/>
+      Claudio Gandra</p>
+  </div>
+</footer>);
 
 export default App;

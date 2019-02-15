@@ -36,7 +36,7 @@ class ComposeSalad extends Component {
     sallad.push(this.state.dressing);
 
     this.createSalad(sallad);
-    // this.props.history.push('/view-order');
+    this.props.history.push('/view-order');
     this.clearArray();
   }
 
@@ -122,13 +122,16 @@ class ComposeSalad extends Component {
             </select>
           </div>
         </div>
-        <input className="btn mx-auto btn-primary" type="submit" value="Lägg till i order"/>
-      </form>
+        <div className="row justify-content-center mt-5 pt-5 border-top">
+        <input className="btn btn-primary" type="submit" value="Lägg till i varukorg och gå till kassan"/>
+        </div>
+    </form>
 
   );
   }
 }
 
+//ANVÄNDS INTE
 const Checkbox = props => (
   <label key={props.name} className="form-check-label px-2 py-1 col-xl-4 col-sm-6 col">
     <input type='checkbox' name={props.name} checked={props.state[props.type][props.name] || false} onChange={(e) => props.handleChange(e, "extras")}/>
