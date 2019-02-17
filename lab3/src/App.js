@@ -21,6 +21,7 @@ class App extends Component {
       .then(data => this.setState({
         inventory: data.foundations, loading: false
       }));
+      Promise.all(promises).then((res) => {console.log(res)});
     // Promise.all();
     //foundations = Object.keys(foundations).
     //inventory:{foundations + proteins + extras + dressings}
