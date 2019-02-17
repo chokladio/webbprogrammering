@@ -1,0 +1,19 @@
+input:checked+span {
+  background-color: lightgrey;
+  color:white;
+  border-radius:4px;
+}
+
+
+input[type="checkbox"] {
+  display: none;
+}
+
+label{
+  justify-content: center;
+  text-align: center;
+}
+
+span{
+   flex-shrink: 0;
+}
