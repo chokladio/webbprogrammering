@@ -47,7 +47,7 @@ server.listen(8080, function() {
 });
 
 const inventory = {
-  Sallad: {price: 10, foundation: true, vegan: true}, 
+  Sallad: {price: 10, foundation: true, vegan: true},
   Pasta: {price: 10, foundation: true, gluten: true},
   'Salad + Pasta': {price: 10, foundation: true, gluten: true},
   'Salad + Matvete': {price: 10, foundation: true, vegan: true, gluten: true},
