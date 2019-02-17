@@ -1,19 +1,30 @@
 import React, {Component, Fragment} from 'react';
 import './App.css';
-import inventory from './components/inventory.ES6';
 import ComposeSalad from './components/ComposeSalad';
 import ViewOrder from './components/ViewOrder';
 import {BrowserRouter as Router, Route, Redirect, Link, Switch} from "react-router-dom";
 import logo from './logo.svg';
 
-
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      order: []
+      loading: true,
+      order: [],
+      inventory: {}
     }
-    this.newOrder = this.newOrder.bind(this);
+  }
+
+  async componentDidMount() {
+    fetch('http://localhost:8080/foundations/')
+      .then(r => r.json())
+      .then(data => this.setState({
+        inventory: data.foundations, loading: false
+      }));
+    // Promise.all();
+    //foundations = Object.keys(foundations).
+    //inventory:{foundations + proteins + extras + dressings}
+    this.setState({loading: false});
   }
 
   newOrder(salad) {
@@ -31,10 +42,20 @@ class App extends Component {
   }
 
   render() {
-    const composeSaladElem = (params) => <ComposeSalad {...params} inventory={inventory} newOrder={this.newOrder}/>;
-    const viewOrderElem = (params) => <ViewOrder {...params} inventory={inventory} order={this.state.order} newOrder={this.newOrder}/>;
+    console.log(this.state);
+    const composeSaladElem = (params) => <ComposeSalad {...params} inventory={this.state.inventory} newOrder={this.newOrder.bind(this)}/>;
+    const viewOrderElem = (params) => <ViewOrder {...params} inventory={this.state.inventory} order={this.state.order} newOrder={this.newOrder.bind(this)}/>;
     const notFound = () => (<div>404 Sidan finns inte</div>);
     const NotFoundRedirect = () => <Redirect to='/not-found'/> //IMPLEMENTERA
+
+    if (this.state.loading) {
+      return (<div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>)
+    }
+
     return (<Fragment>
       <div className="jumbotron jumbotron-fluid mb-1">
         <div className="row justify-content-center">
@@ -57,7 +78,7 @@ class App extends Component {
             </li>
           </ul>
           <Switch>
-            <Route path="/" exact component={composeSaladElem}/>
+            <Route path="/" exact="exact" component={composeSaladElem}/>
             <Route path="/compose-salad" render={composeSaladElem}/>
             <Route path="/view-order" render={viewOrderElem}/>
             <Route component={notFound}/>

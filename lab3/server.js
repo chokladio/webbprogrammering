@@ -40,7 +40,7 @@ addInventoryListener(server, 'foundation');
 addInventoryListener(server, 'protein');
 addInventoryListener(server, 'extra');
 addInventoryListener(server, 'dressing');
-server.post('/orders/', (req, res, next) => res.send('than you for the order'));
+server.post('/orders/', (req, res, next) => res.send('thank you for the order'));
 
 server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url);
