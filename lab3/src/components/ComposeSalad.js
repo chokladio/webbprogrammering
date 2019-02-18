@@ -82,7 +82,8 @@ class ComposeSalad extends Component {
     let extras = Object.keys(inventory).filter(name => inventory[name].extra);
     let dressings = Object.keys(inventory).filter(name => inventory[name].dressing);
 
-    return (<form onSubmit={this.handleSubmit} noValidate="noValidate">
+    return (
+      <form onSubmit={this.handleSubmit} noValidate="noValidate">
 
       <div className="row justify-content-center mt-5">
         <h5>Välj en bas</h5>

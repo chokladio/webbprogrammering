@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import './App.css';
 import ComposeSalad from './components/ComposeSalad';
 import ViewOrder from './components/ViewOrder';
-import {BrowserRouter as Router, Route, Redirect, Link, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
 import logo from './logo.svg';
 
 class App extends Component {
@@ -16,16 +16,25 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    fetch('http://localhost:8080/foundations/')
-      .then(r => r.json())
-      .then(data => this.setState({
-        inventory: data.foundations, loading: false
-      }));
-      Promise.all(promises).then((res) => {console.log(res)});
-    // Promise.all();
-    //foundations = Object.keys(foundations).
-    //inventory:{foundations + proteins + extras + dressings}
-    this.setState({loading: false});
+    let urls = ['http://localhost:8080/foundations/', 'http://localhost:8080/proteins/', 'http://localhost:8080/extras/', 'http://localhost:8080/dressings/'];
+    let inv_arr = {};
+
+    var promises = urls.map(url => fetch(url).then(y => y.json()));
+
+    Promise.all(promises).then(res => {
+      res.map(re => {
+        re.map(r => {
+          let type = ['foundations', 'proteins', 'extras', 'dressings']; //Inte så snygg lösning...
+          let path = type[res.indexOf(re)] + "/" + r;
+          let url = new URL(path, "http://localhost:8080/"); //Build path to ingredient
+          let val = fetch(url).then(y => y.json());
+          Promise.resolve(val).then(v => {
+            inv_arr[r] = v;
+          });
+        });
+      });
+    });
+    this.setState({loading: false, inventory: inv_arr});
   }
 
   newOrder(salad) {
@@ -47,12 +56,11 @@ class App extends Component {
     const composeSaladElem = (params) => <ComposeSalad {...params} inventory={this.state.inventory} newOrder={this.newOrder.bind(this)}/>;
     const viewOrderElem = (params) => <ViewOrder {...params} inventory={this.state.inventory} order={this.state.order} newOrder={this.newOrder.bind(this)}/>;
     const notFound = () => (<div>404 Sidan finns inte</div>);
-    const NotFoundRedirect = () => <Redirect to='/not-found'/> //IMPLEMENTERA
 
     if (this.state.loading) {
-      return (<div class="d-flex justify-content-center">
-        <div class="spinner-border" role="status">
-          <span class="sr-only">Loading...</span>
+      return (<div className="d-flex justify-content-center">
+        <div className="spinner-border" role="status">
+          <span className="sr-only">Loading...</span>
         </div>
       </div>)
     }
@@ -79,7 +87,7 @@ class App extends Component {
             </li>
           </ul>
           <Switch>
-            <Route path="/" exact="exact" component={composeSaladElem}/>
+            <Route path="/" exact component={composeSaladElem}/>
             <Route path="/compose-salad" render={composeSaladElem}/>
             <Route path="/view-order" render={viewOrderElem}/>
             <Route component={notFound}/>
