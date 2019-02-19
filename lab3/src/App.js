@@ -16,26 +16,27 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    let urls = ['http://localhost:8080/foundations/', 'http://localhost:8080/proteins/', 'http://localhost:8080/extras/', 'http://localhost:8080/dressings/'];
-    let inv_arr = {};
+    let type = ['foundations', 'proteins', 'extras', 'dressings'];
+    let urls = type.map(link => new URL(link + "/", " http://localhost:8080/")); //array of four base URLs
 
     var promises = urls.map(url => fetch(url).then(y => y.json()));
-
-    Promise.all(promises).then(res => {
-      res.map(re => {
-        re.map(r => {
-          let type = ['foundations', 'proteins', 'extras', 'dressings']; //Inte så snygg lösning...
+    Promise.all(promises).then(res => {res.every(re => {re.every(r => {
           let path = type[res.indexOf(re)] + "/" + r;
           let url = new URL(path, "http://localhost:8080/"); //Build path to ingredient
           let val = fetch(url).then(y => y.json());
+          console.log(val);
           Promise.resolve(val).then(v => {
-            inv_arr[r] = v;
-          });
-        });
-      });
-    });
-    this.setState({loading: false, inventory: inv_arr});
+            console.log(v); //v = detaljobjekten
+            //inv_arr[r] = v;
+          })
+          return val;
+        })})
+    }).then(val => console.log(val)).then(this.setState({loading: false, inventory: "hej"}));
+
+
   }
+
+
 
   newOrder(salad) {
     salad = {
@@ -51,8 +52,29 @@ class App extends Component {
     console.log(salad);
   }
 
+  serverRequest() {
+
+    let xmlhttp = new XMLHttpRequest();
+    let url = "http://localhost:8080/orders/";
+    const data = this.state.order;
+
+    xmlhttp.open("POST", url, true);
+    const params = {
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(...data)
+    };
+
+    xmlhttp.onreadystatechange = function() { //Call a function when the state changes.
+      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        alert(xmlhttp.responseText);
+      }
+    }
+    xmlhttp.send(params);
+  }
+
   render() {
-    console.log(this.state);
     const composeSaladElem = (params) => <ComposeSalad {...params} inventory={this.state.inventory} newOrder={this.newOrder.bind(this)}/>;
     const viewOrderElem = (params) => <ViewOrder {...params} inventory={this.state.inventory} order={this.state.order} newOrder={this.newOrder.bind(this)}/>;
     const notFound = () => (<div>404 Sidan finns inte</div>);
@@ -75,6 +97,7 @@ class App extends Component {
         <div className="row justify-content-center">
           <p className="lead mt-3">"Man säger ju aldrig nej till lite sallad"</p>
         </div>
+        <button onClick={this.serverRequest.bind(this)}>test xmlhttp POST req</button>
       </div>
       <Router>
         <div className="container">
@@ -87,7 +110,7 @@ class App extends Component {
             </li>
           </ul>
           <Switch>
-            <Route path="/" exact component={composeSaladElem}/>
+            <Route path="/" exact="exact" component={composeSaladElem}/>
             <Route path="/compose-salad" render={composeSaladElem}/>
             <Route path="/view-order" render={viewOrderElem}/>
             <Route component={notFound}/>
