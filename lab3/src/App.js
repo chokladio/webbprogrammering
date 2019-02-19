@@ -9,7 +9,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
+      loading: false,
       order: [],
       inventory: {}
     }
@@ -19,24 +19,57 @@ class App extends Component {
     let type = ['foundations', 'proteins', 'extras', 'dressings'];
     let urls = type.map(link => new URL(link + "/", " http://localhost:8080/")); //array of four base URLs
 
-    var promises = urls.map(url => fetch(url).then(y => y.json()));
-    Promise.all(promises).then(res => {res.every(re => {re.every(r => {
+    let details = [];
+    let names = [];
+    let inv_arr = {};
+    let promises = urls.map(url => fetch(url).then(y => y.json()));
+
+    Promise.all(promises).then(res => {
+      res.forEach(re => {
+        re.forEach(r => {
           let path = type[res.indexOf(re)] + "/" + r;
           let url = new URL(path, "http://localhost:8080/"); //Build path to ingredient
           let val = fetch(url).then(y => y.json());
-          console.log(val);
-          Promise.resolve(val).then(v => {
-            console.log(v); //v = detaljobjekten
-            //inv_arr[r] = v;
+          details.push(val);
+          names.push(r);
+        })
+      })
+    }).then(() => {
+      Promise.all(details).then(items => {
+        Object.values(items).forEach(c => {
+          names.forEach(k => {
+            inv_arr[k] = c;
           })
-          return val;
-        })})
-    }).then(val => console.log(val)).then(this.setState({loading: false, inventory: "hej"}));
-
-
+        })
+      })
+    }).then(() => {
+      this.setState({loading: false, inventory: inv_arr});
+      console.log(this.state.inventory);
+    })
+    console.log(this.state.inventory);
   }
 
-
+  // async componentDidMount() {
+  //   let urls = ['http://localhost:8080/foundations/', 'http://localhost:8080/proteins/', 'http://localhost:8080/extras/', 'http://localhost:8080/dressings/'];
+  //   let inv_arr = {};
+  //
+  //   var promises = urls.map(url => fetch(url).then(y => y.json()));
+  //
+  //   Promise.all(promises).then(res => {
+  //     res.map(re => {
+  //       re.map(r => {
+  //         let type = ['foundations', 'proteins', 'extras', 'dressings']; Inte så snygg lösning...
+  //         let path = type[res.indexOf(re)] + "/" + r;
+  //         let url = new URL(path, "http://localhost:8080/"); Build path to ingredient
+  //         let val = fetch(url).then(y => y.json());
+  //         Promise.resolve(val).then(v => {
+  //           inv_arr[r] = v;
+  //         });
+  //       });
+  //     });
+  //   });
+  //   this.setState({loading: false, inventory: inv_arr});
+  // }
 
   newOrder(salad) {
     salad = {
@@ -53,7 +86,6 @@ class App extends Component {
   }
 
   serverRequest() {
-
     let xmlhttp = new XMLHttpRequest();
     let url = "http://localhost:8080/orders/";
     const data = this.state.order;
@@ -110,7 +142,7 @@ class App extends Component {
             </li>
           </ul>
           <Switch>
-            <Route path="/" exact="exact" component={composeSaladElem}/>
+            <Route path="/" exact component={composeSaladElem}/>
             <Route path="/compose-salad" render={composeSaladElem}/>
             <Route path="/view-order" render={viewOrderElem}/>
             <Route component={notFound}/>
