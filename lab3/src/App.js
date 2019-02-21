@@ -64,8 +64,8 @@ class App extends Component {
           });
         });
       });
-    });
-    this.setState({loading: false, inventory: inv_arr});
+    }).then(this.setState({inventory: inv_arr}))
+    .then(this.setState({loading: false}))
   }
 
   newOrder(salad) {
@@ -139,7 +139,7 @@ class App extends Component {
               </li>
             </ul>
             <Switch>
-              <Route path="/" exact component={composeSaladElem}/>
+              <Route path="/" exact="exact" component={composeSaladElem}/>
               <Route path="/compose-salad" render={composeSaladElem}/>
               <Route path="/view-order" render={viewOrderElem}/>
               <Route component={notFound}/>
