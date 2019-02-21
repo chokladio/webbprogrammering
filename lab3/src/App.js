@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import './App.css';
 import ComposeSalad from './components/ComposeSalad';
 import ViewOrder from './components/ViewOrder';
-import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Link, Redirect, Switch} from "react-router-dom";
 import logo from './logo.svg';
 
 class App extends Component {
@@ -87,7 +87,7 @@ class App extends Component {
       return;
     }
     this.state.order = JSON.parse(localStorage.getItem('orders'));
-    //alert("Du har en pågående beställning");
+    alert("Du har en pågående beställning");
   }
 
   serverRequest() {
@@ -111,16 +111,16 @@ class App extends Component {
   }
 
   render() {
-    // console.log(this.state.order);
-    // console.log(JSON.parse(localStorage.getItem('orders')));
-
     const composeSaladElem = (props) => <ComposeSalad {...props} inventory={this.state.inventory} newOrder={this.newOrder.bind(this)}/>;
     const viewOrderElem = (props) => <ViewOrder {...props} inventory={this.state.inventory} order={this.state.order} storage={localStorage}/>;
-    const routing = (<Switch>
-      <Route path="/" exact="exact" render={composeSaladElem}/>
-      <Route path="/compose-salad" render={composeSaladElem}/>
-      <Route path="/view-order" render={viewOrderElem}/>
-    </Switch>);
+    const routing = (
+      <Switch>
+
+        <Route path="/compose-salad" component={composeSaladElem}/>
+        <Route path="/view-order" component={viewOrderElem}/>
+        <Route path="/" exact component={composeSaladElem}/>
+        <Redirect from='*' to='/' />
+      </Switch>);
 
     if (this.state.loading) {
       return (<div className="d-flex justify-content-center">
@@ -145,9 +145,7 @@ class App extends Component {
                 <button onClick={this.serverRequest.bind(this)}>test xmlhttp POST req</button>
               </li>
             </ul>
-
             {routing}
-
           </div>
         </Router>
         <Footer/>
