@@ -48,7 +48,7 @@ class ComposeSalad extends Component {
 
       this.createSalad(sallad);
       this.props.history.push('/view-order');
-      this.clearArray();
+
     }
   }
 
@@ -56,6 +56,7 @@ class ComposeSalad extends Component {
     const mySalad = new Salad();
     mySalad.add(s);
     this.props.newOrder(mySalad);
+    this.clearArray();
   }
 
   handleChange(e, type) {

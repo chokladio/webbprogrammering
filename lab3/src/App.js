@@ -13,6 +13,7 @@ class App extends Component {
       order: [],
       inventory: {}
     }
+    this.checkStorageOrder();
   }
 
   // async componentDidMount() {
@@ -64,48 +65,29 @@ class App extends Component {
           });
         });
       });
-    }).then(this.setState({inventory: inv_arr})).then(this.setState({loading: false}))
+    }).then(this.setState({inventory: inv_arr})
+    ).then(this.setState({loading: false}))
   }
 
-  newOrder(salad) {
+  newOrder = salad => {
     salad = {
       ...salad,
-      "price": salad.price()
+      "price": salad.price() //add price to salad object
     };
-    this.setState(prevState => ({
+    this.setState({ //add salad to state.order
       order: [
-        ...prevState.order,
+        ...this.state.order,
         salad
       ]
-    }));
-    console.log(salad);
-    localStorage.setItem("hej","då");
-
-    console.log(localStorage);
+    }, () => localStorage.setItem("orders", JSON.stringify(this.state.order))) //add state.order to localstorage.order
   }
 
-  onSearch = (e) => {
-    e.preventDefault();
-    const { value } = this.input;
-    if (value === '') {
+  checkStorageOrder = () => {
+    if (!localStorage.length) {
       return;
     }
-
-    const cachedHits = localStorage.getItem(value);
-    if (cachedHits) {
-      this.setState({ hits: JSON.parse(cachedHits) });
-      return;
-    }
-    
-    fetch('https://hn.algolia.com/api/v1/search?query=' + value)
-      .then(response => response.json())
-      .then(result => this.onSetResult(result, value));
-
-  }
-
-  onSetResult = (result, key) => {
-    localStorage.setItem(key, JSON.stringify(result.hits));
-    this.setState({ hits: result.hits });
+    this.state.order = JSON.parse(localStorage.getItem('orders'));
+    //alert("Du har en pågående beställning");
   }
 
   serverRequest() {
@@ -129,15 +111,16 @@ class App extends Component {
   }
 
   render() {
-    // const routing = (
-    //   <Router>
-    //     <div>
-    //       <Route path="/" component={App} />
-    //       <Route path="/users" component={Users} />
-    //       <Route path="/contact" component={Contact} />
-    //     </div>
-    //   </Router>
-    // )
+    // console.log(this.state.order);
+    // console.log(JSON.parse(localStorage.getItem('orders')));
+
+    const composeSaladElem = (props) => <ComposeSalad {...props} inventory={this.state.inventory} newOrder={this.newOrder.bind(this)}/>;
+    const viewOrderElem = (props) => <ViewOrder {...props} inventory={this.state.inventory} order={this.state.order} storage={localStorage}/>;
+    const routing = (<Switch>
+      <Route path="/" exact="exact" render={composeSaladElem}/>
+      <Route path="/compose-salad" render={composeSaladElem}/>
+      <Route path="/view-order" render={viewOrderElem}/>
+    </Switch>);
 
     if (this.state.loading) {
       return (<div className="d-flex justify-content-center">
@@ -146,8 +129,6 @@ class App extends Component {
         </div>
       </div>)
     } else {
-      const composeSaladElem = (props) => <ComposeSalad {...props} inventory={this.state.inventory} newOrder={this.newOrder.bind(this)}/>;
-      const viewOrderElem = (props) => <ViewOrder {...props} inventory={this.state.inventory} order={this.state.order} newOrder={this.newOrder.bind(this)}/>;
 
       return (<Fragment>
         <Header/>
@@ -165,11 +146,7 @@ class App extends Component {
               </li>
             </ul>
 
-            <Switch>
-              <Route path="/" exact render={composeSaladElem}/>
-              <Route path="/compose-salad" render={composeSaladElem}/>
-              <Route path="/view-order" render={viewOrderElem}/>
-            </Switch>
+            {routing}
 
           </div>
         </Router>
