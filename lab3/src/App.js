@@ -64,8 +64,7 @@ class App extends Component {
           });
         });
       });
-    }).then(this.setState({inventory: inv_arr}))
-    .then(this.setState({loading: false}))
+    }).then(this.setState({inventory: inv_arr})).then(this.setState({loading: false}))
   }
 
   newOrder(salad) {
@@ -80,6 +79,33 @@ class App extends Component {
       ]
     }));
     console.log(salad);
+    localStorage.setItem("hej","då");
+
+    console.log(localStorage);
+  }
+
+  onSearch = (e) => {
+    e.preventDefault();
+    const { value } = this.input;
+    if (value === '') {
+      return;
+    }
+
+    const cachedHits = localStorage.getItem(value);
+    if (cachedHits) {
+      this.setState({ hits: JSON.parse(cachedHits) });
+      return;
+    }
+    
+    fetch('https://hn.algolia.com/api/v1/search?query=' + value)
+      .then(response => response.json())
+      .then(result => this.onSetResult(result, value));
+
+  }
+
+  onSetResult = (result, key) => {
+    localStorage.setItem(key, JSON.stringify(result.hits));
+    this.setState({ hits: result.hits });
   }
 
   serverRequest() {
@@ -103,7 +129,15 @@ class App extends Component {
   }
 
   render() {
-    const notFound = () => (<div>404 Sidan finns inte</div>);
+    // const routing = (
+    //   <Router>
+    //     <div>
+    //       <Route path="/" component={App} />
+    //       <Route path="/users" component={Users} />
+    //       <Route path="/contact" component={Contact} />
+    //     </div>
+    //   </Router>
+    // )
 
     if (this.state.loading) {
       return (<div className="d-flex justify-content-center">
@@ -112,22 +146,11 @@ class App extends Component {
         </div>
       </div>)
     } else {
-      console.log(this.state.inventory);
-      const composeSaladElem = (params) => <ComposeSalad inventory={this.state.inventory} newOrder={this.newOrder.bind(this)}/>;
-      const viewOrderElem = (params) => <ViewOrder inventory={this.state.inventory} order={this.state.order} newOrder={this.newOrder.bind(this)}/>;
+      const composeSaladElem = (props) => <ComposeSalad {...props} inventory={this.state.inventory} newOrder={this.newOrder.bind(this)}/>;
+      const viewOrderElem = (props) => <ViewOrder {...props} inventory={this.state.inventory} order={this.state.order} newOrder={this.newOrder.bind(this)}/>;
 
       return (<Fragment>
-        <div className="jumbotron jumbotron-fluid mb-1">
-          <div className="row justify-content-center">
-            <h1 className="display-4"><img src={logo} style={{
-          width: 90 + 'px'
-        }} className="App-logo align-top" alt="logo"/>Sallad? Sallad!</h1>
-          </div>
-          <div className="row justify-content-center">
-            <p className="lead mt-3">"Man säger ju aldrig nej till lite sallad"</p>
-          </div>
-          <button onClick={this.serverRequest.bind(this)}>test xmlhttp POST req</button>
-        </div>
+        <Header/>
         <Router>
           <div className="container">
             <ul className="nav nav-pills nav-justified justify-content-center">
@@ -137,13 +160,17 @@ class App extends Component {
               <li className="nav-item">
                 <Link className="nav-link" to="view-order">Visa beställning</Link>
               </li>
+              <li className="nav-item">
+                <button onClick={this.serverRequest.bind(this)}>test xmlhttp POST req</button>
+              </li>
             </ul>
+
             <Switch>
-              <Route path="/" exact="exact" component={composeSaladElem}/>
+              <Route path="/" exact render={composeSaladElem}/>
               <Route path="/compose-salad" render={composeSaladElem}/>
               <Route path="/view-order" render={viewOrderElem}/>
-              <Route component={notFound}/>
             </Switch>
+
           </div>
         </Router>
         <Footer/>
@@ -152,7 +179,18 @@ class App extends Component {
   }
 }
 
-const Footer = props => (<footer className="page-footer font-small gray mt-5 pt-5 font-small">
+const Header = () => (<div className="jumbotron jumbotron-fluid mb-1">
+  <div className="row justify-content-center">
+    <h1 className="display-4"><img src={logo} style={{
+    width: 90 + 'px'
+  }} className="App-logo align-top" alt="logo"/>Sallad? Sallad!</h1>
+  </div>
+  <div className="row justify-content-center">
+    <p className="lead mt-3">"Man säger ju aldrig nej till lite sallad"</p>
+  </div>
+</div>);
+
+const Footer = () => (<footer className="page-footer font-small gray mt-5 pt-5 font-small">
   <div className="footer-copyright text-center pt-3">
     <p>EDAF90 - Web Programming 2019
       <br/>
