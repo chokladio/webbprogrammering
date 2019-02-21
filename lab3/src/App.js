@@ -17,7 +17,7 @@ class App extends Component {
 
   // async componentDidMount() {
   //   let type = ['foundations', 'proteins', 'extras', 'dressings'];
-  //   let urls = type.map(link => new URL(link + "/", " http://localhost:8080/")); array of four base URLs
+  //   let urls = type.map(link => new URL(link + "/", " http://localhost:8080/"));
   //
   //   let details = [];
   //   let names = [];
@@ -28,7 +28,7 @@ class App extends Component {
   //     res.forEach(re => {
   //       re.forEach(r => {
   //         let path = type[res.indexOf(re)] + "/" + r;
-  //         let url = new URL(path, "http://localhost:8080/"); Build path to ingredient
+  //         let url = new URL(path, "http://localhost:8080/");
   //         let val = fetch(url).then(y => y.json());
   //         details.push(val);
   //         names.push(r);
@@ -50,9 +50,8 @@ class App extends Component {
   async componentDidMount() {
     let type = ['foundations', 'proteins', 'extras', 'dressings'];
     let urls = type.map(link => new URL(link + "/", " http://localhost:8080/")); //array of the four base URLs
-    let inv_arr = {};
-
     var promises = urls.map(url => fetch(url).then(y => y.json()));
+    let inv_arr = {};
 
     Promise.all(promises).then(res => {
       res.forEach(re => {
@@ -84,11 +83,9 @@ class App extends Component {
   }
 
   serverRequest() {
-    let xmlhttp = new XMLHttpRequest();
+    let xhttp = new XMLHttpRequest();
     let url = "http://localhost:8080/orders/";
     const data = this.state.order;
-
-    xmlhttp.open("POST", url, true);
     const params = {
       headers: {
         "content-type": "application/json"
@@ -96,12 +93,13 @@ class App extends Component {
       body: JSON.stringify(...data)
     };
 
-    xmlhttp.onreadystatechange = function() { //Call a function when the state changes.
-      if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-        alert(xmlhttp.responseText);
+    xhttp.open("POST", url, true);
+    xhttp.onreadystatechange = function() { //Call a function when the state changes.
+      if (xhttp.readyState === 4 && xhttp.status === 200) {
+        alert(xhttp.responseText);
       }
     }
-    xmlhttp.send(params);
+    xhttp.send(params);
   }
 
   render() {
@@ -115,8 +113,8 @@ class App extends Component {
       </div>)
     } else {
       console.log(this.state.inventory);
-      const composeSaladElem = (params) => <ComposeSalad {...params} inventory={this.state.inventory} newOrder={this.newOrder.bind(this)}/>;
-      const viewOrderElem = (params) => <ViewOrder {...params} inventory={this.state.inventory} order={this.state.order} newOrder={this.newOrder.bind(this)}/>;
+      const composeSaladElem = (params) => <ComposeSalad inventory={this.state.inventory} newOrder={this.newOrder.bind(this)}/>;
+      const viewOrderElem = (params) => <ViewOrder inventory={this.state.inventory} order={this.state.order} newOrder={this.newOrder.bind(this)}/>;
 
       return (<Fragment>
         <div className="jumbotron jumbotron-fluid mb-1">
@@ -141,7 +139,7 @@ class App extends Component {
               </li>
             </ul>
             <Switch>
-              <Route path="/" exact="exact" component={composeSaladElem}/>
+              <Route path="/" exact component={composeSaladElem}/>
               <Route path="/compose-salad" render={composeSaladElem}/>
               <Route path="/view-order" render={viewOrderElem}/>
               <Route component={notFound}/>
