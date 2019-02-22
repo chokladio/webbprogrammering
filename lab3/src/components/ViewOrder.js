@@ -22,9 +22,7 @@ const ViewOrder = props => {
           {props.order.map((s, i) => <OrderView order={s} index={i} key={i.toString()}/>)}
         </tbody>
       </table>
-      <div className="justify-content-center mt-5">
-        <button onClick={()=>props.storage.clear()}>Betala</button>
-      </div>
+      <button onClick={()=>{props.storage.clear();props.serverReq();window.location.reload()}}>Betala</button>
     </div>);
   }
   return (<div className="row justify-content-center">

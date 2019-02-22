@@ -16,38 +16,6 @@ class App extends Component {
     this.checkStorageOrder();
   }
 
-  // async componentDidMount() {
-  //   let type = ['foundations', 'proteins', 'extras', 'dressings'];
-  //   let urls = type.map(link => new URL(link + "/", " http://localhost:8080/"));
-  //
-  //   let details = [];
-  //   let names = [];
-  //   let inv_arr = {};
-  //   let promises = urls.map(url => fetch(url).then(y => y.json()));
-  //
-  //   Promise.all(promises).then(res => {
-  //     res.forEach(re => {
-  //       re.forEach(r => {
-  //         let path = type[res.indexOf(re)] + "/" + r;
-  //         let url = new URL(path, "http://localhost:8080/");
-  //         let val = fetch(url).then(y => y.json());
-  //         details.push(val);
-  //         names.push(r);
-  //       })
-  //     })
-  //   }).then(() => {
-  //     Promise.all(details).then(items => {
-  //       Object.values(items).forEach(c => {
-  //         names.forEach(k => {
-  //           inv_arr[k] = c;
-  //         })
-  //       })
-  //     })
-  //   }).then(() => {
-  //     this.setState({loading: false, inventory: inv_arr});
-  //   })
-  // }
-
   async componentDidMount() {
     let type = ['foundations', 'proteins', 'extras', 'dressings'];
     let urls = type.map(link => new URL(link + "/", " http://localhost:8080/")); //array of the four base URLs
@@ -59,14 +27,14 @@ class App extends Component {
         re.forEach(r => {
           let path = type[res.indexOf(re)] + "/" + r;
           let url = new URL(path, "http://localhost:8080/");
-          let val = fetch(url).then(y => y.json());
-          Promise.resolve(val).then(v => {
+          let val = fetch(url).then(y => y.json()).then(v => {
             inv_arr[r] = v;
-          });
-        });
-      });
-    }).then(this.setState({inventory: inv_arr})
-    ).then(this.setState({loading: false}))
+          }).then(() => {
+            this.setState({inventory: inv_arr, loading: false})
+          })
+        })
+      })
+    })
   }
 
   newOrder = salad => {
@@ -80,14 +48,18 @@ class App extends Component {
         salad
       ]
     }, () => localStorage.setItem("orders", JSON.stringify(this.state.order))) //add state.order to localstorage.order
+    console.log(localStorage);
   }
 
   checkStorageOrder = () => {
-    if (!localStorage.length) {
+    if (!localStorage.orders) {
+      console.log(localStorage);
       return;
+    } else {
+      console.log(localStorage);
+      this.state.order = JSON.parse(localStorage.getItem('orders'));
+      alert("Du har en pågående beställning");
     }
-    this.state.order = JSON.parse(localStorage.getItem('orders'));
-    alert("Du har en pågående beställning");
   }
 
   serverRequest() {
@@ -111,16 +83,15 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state);
     const composeSaladElem = (props) => <ComposeSalad {...props} inventory={this.state.inventory} newOrder={this.newOrder.bind(this)}/>;
-    const viewOrderElem = (props) => <ViewOrder {...props} inventory={this.state.inventory} order={this.state.order} storage={localStorage}/>;
-    const routing = (
-      <Switch>
-
-        <Route path="/compose-salad" component={composeSaladElem}/>
-        <Route path="/view-order" component={viewOrderElem}/>
-        <Route path="/" exact component={composeSaladElem}/>
-        <Redirect from='*' to='/' />
-      </Switch>);
+    const viewOrderElem = (props) => <ViewOrder {...props} inventory={this.state.inventory} serverReq={this.serverRequest.bind(this)} order={this.state.order} storage={localStorage}/>;
+    const routing = (<Switch>
+      <Route path="/compose-salad" component={composeSaladElem}/>
+      <Route path="/view-order" component={viewOrderElem}/>
+      <Route path="/" exact component={composeSaladElem}/>
+      <Redirect from='*' to='/'/>
+    </Switch>);
 
     if (this.state.loading) {
       return (<div className="d-flex justify-content-center">
@@ -140,9 +111,6 @@ class App extends Component {
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="view-order">Visa beställning</Link>
-              </li>
-              <li className="nav-item">
-                <button onClick={this.serverRequest.bind(this)}>test xmlhttp POST req</button>
               </li>
             </ul>
             {routing}
