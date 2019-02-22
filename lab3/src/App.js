@@ -23,18 +23,20 @@ class App extends Component {
     let inv_arr = {};
 
     Promise.all(promises).then(res => {
-      res.forEach(re => {
-        re.forEach(r => {
+        let p = res.map(re => {
+        let q = re.map(r => {
           let path = type[res.indexOf(re)] + "/" + r;
           let url = new URL(path, "http://localhost:8080/");
-          let val = fetch(url).then(y => y.json()).then(v => {
+          return fetch(url).then(y => y.json()).then(v => {
             inv_arr[r] = v;
-          }).then(() => {
-            this.setState({inventory: inv_arr, loading: false})
           })
         })
+        console.log(q);
+        return Promise.all(q);
       })
-    })
+      console.log(p);
+      return Promise.all(p);
+    }).then(() => {this.setState({inventory: inv_arr, loading: false})})
   }
 
   newOrder = salad => {
@@ -48,15 +50,12 @@ class App extends Component {
         salad
       ]
     }, () => localStorage.setItem("orders", JSON.stringify(this.state.order))) //add state.order to localstorage.order
-    console.log(localStorage);
   }
 
   checkStorageOrder = () => {
     if (!localStorage.orders) {
-      console.log(localStorage);
       return;
     } else {
-      console.log(localStorage);
       this.state.order = JSON.parse(localStorage.getItem('orders'));
       alert("Du har en pågående beställning");
     }
@@ -83,7 +82,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state);
     const composeSaladElem = (props) => <ComposeSalad {...props} inventory={this.state.inventory} newOrder={this.newOrder.bind(this)}/>;
     const viewOrderElem = (props) => <ViewOrder {...props} inventory={this.state.inventory} serverReq={this.serverRequest.bind(this)} order={this.state.order} storage={localStorage}/>;
     const routing = (<Switch>

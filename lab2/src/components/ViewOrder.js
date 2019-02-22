@@ -1,5 +1,4 @@
 import React from 'react';
-import Octicon, {Trashcan} from '@githubprimer/octicons-react';
 //npm install @githubprimer/octicons-react --save
 
 const ViewOrder = props => {
@@ -15,7 +14,6 @@ const ViewOrder = props => {
             <th scope="col">Extra</th>
             <th scope="col">Dressing</th>
             <th scope="col">Pris</th>
-            <th scope="col">ta bort</th>
           </tr>
         </thead>
         <tbody>
@@ -37,9 +35,7 @@ const OrderView = props => (<tr>
   <td>{props.order.dressing.map(n => n.name)}</td>
   <td>{props.order.price}
     kr</td>
-  <td>
-    <Octicon icon={Trashcan}/>
-  </td>
+
 </tr>)
 
 export default ViewOrder;
