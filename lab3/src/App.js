@@ -27,16 +27,25 @@ class App extends Component {
         let q = re.map(r => {
           let path = type[res.indexOf(re)] + "/" + r;
           let url = new URL(path, "http://localhost:8080/");
+
           return fetch(url).then(y => y.json()).then(v => {
             inv_arr[r] = v;
           })
+          
         })
+
         console.log(q);
         return Promise.all(q);
+
       })
+
       console.log(p);
       return Promise.all(p);
-    }).then(() => {this.setState({inventory: inv_arr, loading: false})})
+
+    }).then(() => {
+      this.setState({inventory: inv_arr, loading: false
+      })
+    })
   }
 
   newOrder = salad => {
